@@ -92,3 +92,6 @@ Notes
 
 - This project is designed to run locally and scale to the cloud later.
 - Airflow is optional in the first iteration; it will handle automation and orchestration in later phases.
+=======
+# real-time-data-streaming-pipeline
+A real-time data engineering pipeline for processing, analyzing, and visualizing big data using Kafka, Spark Structured Streaming, S3, Airflow, and Power BI
