@@ -1,0 +1,5 @@
+confluent-kafka==2.0.2
+kafka-python==2.0.2
+pyspark==3.4.1
+pyarrow
+fastavro
