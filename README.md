@@ -1,21 +1,21 @@
 # Real-Time Video Big Data Analytics (VBDA) Pipeline
 
 ## Project Overview
-This project implements a **real-time data pipeline** for processing **TEDx YouTube videos**.  
+This project implements a **real-time data pipeline** for processing **Football live streamed videos**.  
 The pipeline captures video metadata, statistics, and transcripts, transforms the data, and stores it for analytics and visualization.
 
 **Pipeline Flow:**
-YouTube → Kafka → Spark Structured Streaming → S3 (Bronze/Silver/Gold) → Athena → Power BI
+Sportmonks WebSocket → Kafka → Spark Structured Streaming → S3 (Bronze/Silver/Gold) → Athena → Power BI
 
 
 ---
 
 ## Objectives
 - Build a scalable **real-time data ingestion pipeline**  
-- Implement **stream processing** using PySpark  
-- Store processed data in **cloud storage** (S3 / BigQuery / Snowflake)  
+- Implement **stream processing** using Spark  
+- Store processed data in **cloud storage** (S3)  
 - Enable **analytics dashboards** using Power BI  
-- Automate recurring batch tasks with Airflow (optional)
+- Automate recurring batch tasks with Airflow
 
 ---
 
@@ -48,7 +48,7 @@ vbda-pipeline/
 
 ## Pipeline Phases
 1. **Data Ingestion**:  
-   Fetch video metadata, stats, and transcripts from YouTube → send to Kafka topics.
+   Fetch video metadata, stats, and transcripts → send to Kafka topics.
 2. **Stream Processing**:  
    Spark Structured Streaming reads Kafka topics → transforms data → writes to S3 Bronze.
 3. **Data Cleaning & Aggregation**:  
