@@ -28,16 +28,16 @@ def main():
         return
 
     # Create producer (will connect to local Kafka)
-    print("🔌 Connecting to Kafka and SportMonks API...")
+    print(">>> Connecting to Kafka and SportMonks API...")
     producer = SportsDataProducer(SPORTMONKS_API_TOKEN)
 
     try:
         # Run single cycle
-        print("📊 Fetching sports data...")
+        print(">>> Fetching sports data...")
         producer.run_once()
 
-        print("✅ Producer test completed successfully!")
-        print("\n📋 Check your Kafka topics for data:")
+        print("[+] Producer test completed successfully!")
+        print("\n[*] Check your Kafka topics for data:")
         print("   - sports.fixtures")
         print("   - sports.livescores")
         print("   - sports.leagues")

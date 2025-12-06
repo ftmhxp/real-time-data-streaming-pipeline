@@ -8,7 +8,7 @@ import json
 import time
 import logging
 from datetime import datetime, timedelta
-from confluent_kafka import Producer
+from kafka import KafkaProducer
 import sys
 import os
 
@@ -35,12 +35,18 @@ class SportsDataProducer:
         self.api_token = api_token
         self.base_url = "https://api.sportmonks.com/v3"
 
-        # Kafka producer configuration
-        self.kafka_config = {
-            'bootstrap.servers': kafka_bootstrap_servers,
-            'client.id': 'sports-producer'
-        }
-        self.producer = Producer(self.kafka_config)
+        # Kafka producer configuration - simplified for kafka-python compatibility
+        self.producer = KafkaProducer(
+            bootstrap_servers=['localhost:9092'],  # Only use kafka1
+            client_id='sports-producer',
+            value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+            key_serializer=lambda k: str(k).encode('utf-8') if k else None,
+            # Basic timeout settings
+            request_timeout_ms=10000,
+            api_version=(2, 6, 0),
+            # Disable metadata refresh to avoid DNS issues
+            metadata_max_age_ms=60000
+        )
 
         # Topics for different data types
         self.topics = {
@@ -57,34 +63,20 @@ class SportsDataProducer:
             'leagues': None
         }
 
-    def delivery_report(self, err, msg):
-        """Callback for Kafka message delivery"""
-        if err is not None:
-            logger.error(f'Message delivery failed: {err}')
-        else:
-            logger.debug(f'Message delivered to {msg.topic()} [{msg.partition()}]')
 
     def send_to_kafka(self, topic, data, key=None):
         """Send data to Kafka topic"""
         try:
-            # Convert data to JSON string
-            message_value = json.dumps(data)
-
             # Use key for partitioning (optional)
             message_key = key or str(data.get('id', 'unknown'))
 
-            # Send message
-            self.producer.produce(
-                topic,
-                key=message_key,
-                value=message_value,
-                callback=self.delivery_report
-            )
+            # Send message (kafka-python handles JSON serialization)
+            future = self.producer.send(topic, value=data, key=message_key)
 
-            # Flush to ensure delivery
-            self.producer.flush()
+            # Wait for the message to be sent
+            record_metadata = future.get(timeout=10)
 
-            logger.info(f"Sent to {topic}: {data.get('id', 'unknown')}")
+            logger.info(f"Sent to {topic} partition {record_metadata.partition}: {data.get('id', 'unknown')}")
 
         except Exception as e:
             logger.error(f"Failed to send to Kafka: {e}")
@@ -241,7 +233,7 @@ class SportsDataProducer:
         """Run continuous polling loop"""
         logger.info("Starting continuous sports data producer...")
         logger.info(f"Poll interval: {poll_interval_seconds} seconds")
-        logger.info(f"Kafka bootstrap servers: {self.kafka_config['bootstrap.servers']}")
+        logger.info(f"Kafka bootstrap servers: {kafka_bootstrap_servers}")
 
         # Initial data fetch
         logger.info("Fetching initial data...")
