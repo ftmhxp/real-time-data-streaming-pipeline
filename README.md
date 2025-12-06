@@ -1,12 +1,11 @@
-# Real-Time Video Big Data Analytics (VBDA) Pipeline
+# Real-Time Sports Data Analytics Pipeline
 
 ## Project Overview
-This project implements a **real-time sports data pipeline** for processing **live football data**.  
+This project implements a **real-time sports data pipeline** for processing **live football data**.
 The pipeline captures live scores, fixtures, match events, and league information, transforms the data, and stores it for analytics and visualization.
 
 **Pipeline Flow:**
 SportMonks API → Kafka → Spark Structured Streaming → S3 (Bronze/Silver/Gold) → Athena → Power BI
-
 
 ---
 
@@ -101,18 +100,18 @@ docker-compose up -d
 6. Run continuous producer:
 python producer/sports_producer.py
 
-References
+---
 
-- A Survey on Video Big Data Analytics: Architecture, Challenges and - Applications (MDPI, 2025)
+## References
+
+- SportMonks Football API Documentation
 - Apache Kafka Documentation
 - PySpark Structured Streaming Guide
 - AWS S3 & Athena Docs
 - Power BI Official Documentation
 
-Notes
+## Notes
 
 - This project is designed to run locally and scale to the cloud later.
+- SportMonks API polling provides near real-time updates every 1-2 minutes.
 - Airflow is optional in the first iteration; it will handle automation and orchestration in later phases.
-=======
-# real-time-data-streaming-pipeline
-A real-time data engineering pipeline for processing, analyzing, and visualizing big data using Kafka, Spark Structured Streaming, S3, Airflow, and Power BI
