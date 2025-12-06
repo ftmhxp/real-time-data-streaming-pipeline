@@ -3,3 +3,5 @@ kafka-python==2.0.2
 pyspark==3.4.1
 pyarrow
 fastavro
+websockets==11.0.3
+requests==2.31.0
